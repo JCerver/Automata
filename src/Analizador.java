@@ -232,6 +232,7 @@ public class Analizador {
         automataSintactico=new AutomataSintactico(valoresToken);
         automataSintactico.setTokens1(new ArrayList<String>(this.tokens1));
         automataSintactico.automata();
+        System.out.println("Probando github");
         
         
     }
