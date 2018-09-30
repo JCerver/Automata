@@ -1,0 +1,3 @@
+programa Iniciar variables declarar_variables sentencias Finalizar
+declarar_variables tipo variable
+tipo int string

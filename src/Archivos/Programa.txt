@@ -1,0 +1,23 @@
+
+Iniciar
+Variables
+int a,b,c
+String texto 
+int otraVariable
+String pregunta
+printf("Captura un numero:"+a+"fsdf"); 
+captura a;
+printf("Captura un numero:"); 
+do
+printf("Captura un numero:"+a+"fsdf"); 
+captura a;
+printf("Captura otro numero:");
+captura b;
+c=a+b;
+printf("La suma de "+a +" mas "+b+" es "+c);
+printf("Otro calculo? ");
+captura gfdg pregunta;
+while pregunta=='s'
+Finalizar
+
+    
