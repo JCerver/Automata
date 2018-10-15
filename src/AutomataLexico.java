@@ -22,7 +22,7 @@ public class AutomataLexico {
     private String palabraAnalizada = "";
 
     private String palabrasReservadasDelLenguaje[] = {"Iniciar", "Variables", "int", "String", "do", "printf", "captura", "while", "Finalizar"};
-    private String simbolosLenguaje[] = {"(", ")", ",", ";", "'"};
+    private String simbolosLenguaje[] = {"(", ")", ",", ";"};
     private String operadoresLenguaje[] = {"+", "-"};
 
     private ArrayList<String> caracteresAnalizados = new ArrayList<String>();
@@ -41,6 +41,11 @@ public class AutomataLexico {
     private ArrayList<String> tokens2 = new ArrayList<String>();
     private ArrayList<Integer> identificadorToken = new ArrayList<Integer>();
 
+    public ArrayList <Cadena> cadenas = new ArrayList();
+    
+    
+    int contadorGlobal;
+    
     public AutomataLexico(String cadena) {
         this.cadena = cadena;
         this.estado = 0;
@@ -48,6 +53,8 @@ public class AutomataLexico {
 
     public void analizar() {
         boolean puedeSerCadena = false;
+        boolean puedeSerCaracter = false;
+        
         estadoAceptacion = false;
         palabraAnalizada = "";
 
@@ -64,7 +71,7 @@ public class AutomataLexico {
                 simbolo = String.valueOf(cadena.charAt(i));
                 if (i < (cadena.length() - 1)) {
                     simboloSig = String.valueOf(cadena.charAt(i + 1));
-                    System.out.println("Si verifico sig caracter ");
+                   // System.out.println("Si verifico sig caracter ");
                 }
 
                 if (!(simbolo.equals(" "))) {
@@ -73,7 +80,7 @@ public class AutomataLexico {
 
                 switch (estado) {
                     case 0:
-                        System.out.println("entro al caso 0");
+                     //   System.out.println("entro al caso 0");
 
                         if (simbolo.equals(" ")) {
                             estado = 0;
@@ -85,7 +92,7 @@ public class AutomataLexico {
                             } else {
                                 estado = 1;
                                 palabraAnalizada += simbolo;
-                                System.out.println("como que es identificador");
+                                //System.out.println("como que es identificador");
                             }
                         } else if (simbolo.matches(expresionNumero)) {
                             estado = 2;
@@ -107,6 +114,19 @@ public class AutomataLexico {
 
                             if (puedeSerCadena) {
                                 estado = 10;
+                                //puedeSerCadena=false;
+                            } else {
+
+                                estado = 0;
+                            }
+                            
+                        }else if (simbolo.equals("'")) {
+                            palabraAnalizada += simbolo;
+                            analizarSimbolo();
+                            puedeSerCaracter = true;
+
+                            if (puedeSerCaracter) {
+                                estado = 20;
                                 //puedeSerCadena=false;
                             } else {
 
@@ -179,6 +199,28 @@ public class AutomataLexico {
                         break;
                     case 10:
                         if (simbolo.equals("\"")) {
+                        
+                            analizarCadenaConstantes();
+
+                            puedeSerCadena = false;
+                            palabraAnalizada += simbolo;
+                            analizarSimbolo();
+                            estado = 0;
+                        } else if(i==cadena.length()-1){
+                            analizarCadenaConstantes();
+
+                            puedeSerCadena = false;
+                            estado = 0;
+                        }
+                        else {
+                            palabraAnalizada += simbolo;
+                            estado = 10;
+                        }
+                        break;
+                    
+           
+                    case 20:
+                        if (simbolo.equals("'")) {
                             analizarCadenaConstantes();
 
                             puedeSerCadena = false;
@@ -187,18 +229,11 @@ public class AutomataLexico {
                             estado = 0;
                         } else {
                             palabraAnalizada += simbolo;
-                            estado = 10;
+                            estado = 20;
                         }
+                        
                         break;
-                    case 11:
-
-                        break;
-                    case 12:
-
-                        break;
-                    case 13:
-
-                        break;
+                        
                     case 30:
                         analizarIdentificador();
                         estado = 0;
@@ -255,8 +290,14 @@ public class AutomataLexico {
 
         if (isPalabraReservada) {
             palabrasReservadasAnalizadas.add(palabraAnalizada);
-            tokens1.add(palabraAnalizada);
-            tokens2.add("Palabra Reservada");
+            Cadena cadena=new Cadena ();
+            cadena.setCadenaLeida(palabraAnalizada);
+            cadena.setTipoCadena("Palabra Reservada");
+            
+            cadenas.add(cadena);
+            
+            //tokens1.add(palabraAnalizada);
+            //tokens2.add("Palabra Reservada");
             guardarTokenCorrespondiente();
         } else {
             boolean existe;
@@ -334,6 +375,7 @@ public class AutomataLexico {
         tokens1.add(palabraAnalizada);
         tokens2.add("Cadena de Constantes");
 
+        
         identificadorToken.add(valorToken + 300);
 
 //        for (int i =  i < cadenasDeConstantesAnalizadas.size(); i++) {
@@ -361,58 +403,78 @@ public class AutomataLexico {
     }
 
     public void guardarTokenCorrespondiente() {
-
+        cadenas.size();
+        
         switch (palabraAnalizada) {
             case "Iniciar":
-                identificadorToken.add(100);
+                
+                cadenas.get(cadenas.size()-1).setTokenAsignado(100);
+                
+                //identificadorToken.add(100);
                 break;
             case "Variables":
-                identificadorToken.add(101);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(101);
+                //identificadorToken.add(101);
                 break;
             case "int":
-                identificadorToken.add(102);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(102);
+                //identificadorToken.add(102);
                 break;
             case "String":
-                identificadorToken.add(103);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(103);
+                //identificadorToken.add(103);
                 break;
             case "do":
-                identificadorToken.add(104);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(104);
+                //identificadorToken.add(104);
                 break;
             case "printf":
-                identificadorToken.add(105);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(105);
+                //identificadorToken.add(105);
                 break;
             case "captura":
-                identificadorToken.add(106);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(106);
+                //identificadorToken.add(106);
                 break;
             case "while":
-                identificadorToken.add(107);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(107);
+                //identificadorToken.add(107);
                 break;
             case "Finalizar":
-                identificadorToken.add(108);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(108);
+                //identificadorToken.add(108);
                 break;
             case ",":
-                identificadorToken.add(500);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(500);
+                //identificadorToken.add(500);
                 break;
             case "(":
-                identificadorToken.add(501);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(501);
+                //identificadorToken.add(501);
                 break;
             case ")":
-                identificadorToken.add(502);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(502);
+                //identificadorToken.add(502);
                 break;
             case "\"":
-                identificadorToken.add(503);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(503);
+                //identificadorToken.add(503);
                 break;
             case ";":
-                identificadorToken.add(504);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(504);
+               // identificadorToken.add(504);
                 break;
             case "=":
-                identificadorToken.add(505);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(505);
+                //identificadorToken.add(505);
                 break;
             case "==":
-                identificadorToken.add(507);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(507);
+               // identificadorToken.add(507);
                 break;
             case "'":
-                identificadorToken.add(508);
+                cadenas.get(cadenas.size()-1).setTokenAsignado(508);
+                //identificadorToken.add(508);
                 break;
 
         }

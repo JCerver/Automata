@@ -11,8 +11,8 @@ Palabras reservadas
     captura=106
     while=107
     Finalizar=108
-
-Identificador=1-99
+)
+Identificador=1-99 
 Cadena de caracteres= 300-400
 numero=3
 
@@ -63,6 +63,8 @@ public class Analizador {
     String cadenasPrograma = "";
 
     AutomataSintactico automataSintactico;
+    
+    public ArrayList <Cadena> cadenas = new ArrayList();
     
     public Analizador() {
         palabrasReservadas = new ArrayList<String>();
@@ -200,9 +202,9 @@ public class Analizador {
             System.out.println(cadenasDeConstantesAnalizadas.get(i)+"        es cadena de constantes");
         }
         
-        for (int i = 0; i < caracteresAnalizados.size(); i++) {
+      /*  for (int i = 0; i < caracteresAnalizados.size(); i++) {
             System.out.println(caracteresAnalizados.get(i)+"        es cada caracter del programa leido");
-        }
+        }*/
         
          
         
@@ -241,6 +243,7 @@ public class Analizador {
         Analizador test = new Analizador();
         test.leerPrograma();
         test.leer();
+     
 
     }
 }
