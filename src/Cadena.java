@@ -8,7 +8,7 @@
 public class Cadena {
 
     int posicion;
-    String cadenaLeida;
+    String lexema;
     int tokenAsignado;
     String tipoCadena;
     String tipoDato;
@@ -19,11 +19,11 @@ public class Cadena {
 
     public Cadena(int posicion, String cadenaLeida, int tokenAsignado, String tipoCadena, String tipoDato) {
         this.posicion = posicion;
-        this.cadenaLeida = cadenaLeida;
+        this.lexema = cadenaLeida;
         this.tokenAsignado = tokenAsignado;
         this.tipoCadena = tipoCadena;
         this.tipoDato = tipoDato;
-    }
+    } 
 
     public int getPosicion() {
         return posicion;
@@ -33,12 +33,12 @@ public class Cadena {
         this.posicion = posicion;
     }
 
-    public String getCadenaLeida() {
-        return cadenaLeida;
+    public String getLexema() {
+        return lexema;
     }
 
-    public void setCadenaLeida(String cadenaLeida) {
-        this.cadenaLeida = cadenaLeida;
+    public void setLexema(String lexema) { 
+        this.lexema = lexema;
     }
 
     public int getTokenAsignado() {

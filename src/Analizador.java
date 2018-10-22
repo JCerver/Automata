@@ -50,9 +50,7 @@ public class Analizador {
     ArrayList<String> operadoresAnalizados;
     ArrayList<String> cadenasDeConstantesAnalizadas;
     
-    private ArrayList<String> tokens1;
-    private ArrayList<String> tokens2;
-    private ArrayList<Integer> valoresToken;
+   
     
     
     ArrayList<String> palabrasReservadas;
@@ -161,9 +159,9 @@ public class Analizador {
     this.simbolosAnalizados = new ArrayList<String>(automata1.getSimbolosAnalizados());
     this.operadoresAnalizados = new ArrayList<String>(automata1.getOperadoresAnalizados());
     this.cadenasDeConstantesAnalizadas=new ArrayList<String>(automata1.getCadenasDeConstantesAnalizadas());
-    this.tokens1=new ArrayList<String>(automata1.getTokens1());
-    this.tokens2=new ArrayList<String>(automata1.getTokens2());    
-    this.valoresToken=new ArrayList<Integer>(automata1.getIdentificadorToken()); 
+    
+    
+    this.cadenas=new ArrayList<Cadena>(automata1.getCadenas());
     
         
     }
@@ -207,18 +205,12 @@ public class Analizador {
         }*/
         
          
-        
-        for (int i = 0; i < tokens1.size(); i++) {
-            System.out.println(tokens1.get(i)+"        es   "+tokens2.get(i)+ "      en la pocision "+ i);
-        }
-        
-        for (int i = 0; i < valoresToken.size(); i++) {
-            System.out.println(valoresToken.get(i));
+        System.out.println("Posicion      Cadena leida               Token asignado            Tipo de cadena         " );
+        for (int i = 0; i < cadenas.size(); i++) {
+            System.out.println(i + "      " + cadenas.get(i).getLexema() + "       " +  cadenas.get(i).getTokenAsignado() + "       " +cadenas.get(i).getTipoCadena());
         }
         
         
-        System.out.println("El arreglo tokens1.size() es de tamaño "+tokens1.size());
-        System.out.println("El arreglo identificadorToken.size() es de tamaño "+valoresToken.size());
         
     }
     
@@ -231,8 +223,8 @@ public class Analizador {
     }*/
     
     public void llamarAnalizadorSintactico(){
-        automataSintactico=new AutomataSintactico(valoresToken);
-        automataSintactico.setTokens1(new ArrayList<String>(this.tokens1));
+        automataSintactico=new AutomataSintactico();
+        automataSintactico.setCadenas(new ArrayList<Cadena>(this.cadenas));
         automataSintactico.automata();
         System.out.println("Probando github");
         

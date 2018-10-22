@@ -3,15 +3,20 @@ import java.util.ArrayList;
 
 public class AutomataSintactico {
 
-    private ArrayList<Integer> identificadorToken;
-    public ArrayList<String> tokens1;
+ 
     boolean estadoAceptacion;
     int tokenAnalizado, estado;
     
     public ArrayList <Cadena> cadenas = new ArrayList();
 
-    public AutomataSintactico(ArrayList<Integer> tokens) {
-        this.identificadorToken = tokens; 
+    public AutomataSintactico(){
+        
+        
+    }
+    
+    
+    public AutomataSintactico(ArrayList<Cadena> cadenas) {
+       
           
         
     }
@@ -27,8 +32,8 @@ public class AutomataSintactico {
         final String MENSAJE_ERROR_IDENTIFICADOR="Se esperaba un identificador"  ;
         final String MENSAJE_ERROR_CADENA_CARACTERES="Se esperaba una cadena de constantes"  ;
 
-        for (int i = 0; i < identificadorToken.size(); i++) {
-            tokenAnalizado = identificadorToken.get(i);
+        for (int i = 0; i < cadenas.size(); i++) {
+            tokenAnalizado = cadenas.get(i).getTokenAsignado();
 
             if (!(estadoAceptacion) || !(estadoError)) {
 
@@ -42,7 +47,7 @@ public class AutomataSintactico {
                             estado = 200;
                          //   System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == identificadorToken.size()-1) {
+                            if (i == cadenas.size()-1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -63,7 +68,7 @@ public class AutomataSintactico {
                             estado = 200;
                           //  System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == identificadorToken.size()-1) {
+                            if (i == cadenas.size()-1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -85,7 +90,7 @@ public class AutomataSintactico {
                             estado = 200;
                          //    System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == identificadorToken.size()-1) {
+                            if (i == cadenas.size()-1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -133,7 +138,7 @@ public class AutomataSintactico {
                             estado = 200;
                          //    System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == identificadorToken.size()-1) {
+                            if (i == cadenas.size()-1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -316,6 +321,7 @@ public class AutomataSintactico {
                         }
 
                         break;
+                        
 
                     case 18:
                         if (tokenAnalizado == 800 || tokenAnalizado == 801) {
@@ -614,9 +620,9 @@ public class AutomataSintactico {
 
                     case 200:
                         //Estado de aceptacion
-                        i = identificadorToken.size();
+                        i = cadenas.size();
                         estadoAceptacion = true;
-                        if (i == identificadorToken.size()) {
+                        if (i == cadenas.size()) {
                             terminadoEnFinalizar = true;
                         }
 
@@ -646,16 +652,23 @@ public class AutomataSintactico {
     }
 
     public void imprimirError(int posicion) {
-        System.out.println("  Tienes un error en la posicion " + (posicion) + ", no se identifico la cadena " + tokens1.get(posicion - 1));
+        System.out.println("  Tienes un error en la posicion " + (posicion) + ", no se identifico la cadena " + cadenas.get(posicion - 1).getLexema());
 
     }
 
-    public void setTokens1(ArrayList<String> tokens1) {
-        this.tokens1 = tokens1;
-    }
-    
+   
     public void imprimirErrorMensaje(String mensaje,String simbolo){
         System.out.println(mensaje + simbolo);
     }
+
+    public ArrayList<Cadena> getCadenas() {
+        return cadenas;
+    }
+
+    public void setCadenas(ArrayList<Cadena> cadenas) {
+        this.cadenas = cadenas;
+    }
+    
+    
 
 }

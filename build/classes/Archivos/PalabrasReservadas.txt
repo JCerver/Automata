@@ -1,0 +1,11 @@
+Iniciar
+Variables
+int
+String
+do
+printf
+captura
+while
+finalizar
+
+
