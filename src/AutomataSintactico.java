@@ -3,51 +3,49 @@ import java.util.ArrayList;
 
 public class AutomataSintactico {
 
- 
     boolean estadoAceptacion;
     int tokenAnalizado, estado;
-    
-    public ArrayList <Cadena> cadenas = new ArrayList();
 
-    public AutomataSintactico(){
-        
-        
+    public ArrayList<Cadena> objetosCadenas = new ArrayList();
+    ArrayList<SimbologiaToken> simbologia;
+
+    public AutomataSintactico() {
+
     }
-    
-    
-    public AutomataSintactico(ArrayList<Cadena> cadenas) {
-       
-          
-        
+
+    public AutomataSintactico(ArrayList<SimbologiaToken> simbologia) { 
+
+        this.simbologia = new ArrayList<SimbologiaToken>(simbologia);
+
     }
-  
+
     public void automata() {
         estadoAceptacion = false;
         tokenAnalizado = 0;
-        estado = 0; 
+        estado = 0;
         boolean estadoError = false;
         boolean terminadoEnFinalizar = false;
-        final String MENSAJE_ERROR_PALABRA_RESERVADA="Se esperaba la palabra reservada: "  ;
-        final String MENSAJE_ERROR_SIMBOLO="Se esperaba el simbolo: "  ;
-        final String MENSAJE_ERROR_IDENTIFICADOR="Se esperaba un identificador"  ;
-        final String MENSAJE_ERROR_CADENA_CARACTERES="Se esperaba una cadena de constantes"  ;
+        final String MENSAJE_ERROR_PALABRA_RESERVADA = "Se esperaba la palabra reservada: ";
+        final String MENSAJE_ERROR_SIMBOLO = "Se esperaba el simbolo: ";
+        final String MENSAJE_ERROR_IDENTIFICADOR = "Se esperaba un identificador";
+        final String MENSAJE_ERROR_CADENA_CARACTERES = "Se esperaba una cadena de constantes";
 
-        for (int i = 0; i < cadenas.size(); i++) {
-            tokenAnalizado = cadenas.get(i).getTokenAsignado();
+        for (int i = 0; i < objetosCadenas.size(); i++) {
+            tokenAnalizado = objetosCadenas.get(i).getTokenAsignado();
 
             if (!(estadoAceptacion) || !(estadoError)) {
 
                 switch (estado) {
                     case 0:
                         //Si es "Iniciar"
-                        if (tokenAnalizado == 100) {
+                        if (tokenAnalizado == obtenerTokenn("Iniciar")) {
                             estado = 1;
 
-                        } else if (tokenAnalizado == 108) {
+                        } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
-                         //   System.out.println("Paso por el estado " + estado);
+                            //   System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == cadenas.size()-1) {
+                            if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -57,18 +55,18 @@ public class AutomataSintactico {
                             imprimirError(i + 1);
                             imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
                         }
-                      //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 1:
                         //Si es "Variables"
-                        if (tokenAnalizado == 101) {
+                        if (tokenAnalizado == obtenerTokenn("Variables")) {
                             estado = 2;
-                        } else if (tokenAnalizado == 108) {
+                        } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
-                          //  System.out.println("Paso por el estado " + estado);
+                            //  System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == cadenas.size()-1) {
+                            if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -76,21 +74,21 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Variables");
+                            imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Variables");
                         }
-                      //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 2:
                         //aqui vamos, en ver si sigue una declaracion de String o int
                         //Si es "String" o "int"
-                        if (tokenAnalizado == 102 || tokenAnalizado == 103) {
+                        if (tokenAnalizado == obtenerTokenn("int") || tokenAnalizado == obtenerTokenn("String")) {
                             estado = 3;
-                        } else if (tokenAnalizado == 108) {
+                        } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
-                         //    System.out.println("Paso por el estado " + estado);
+                            //    System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == cadenas.size()-1) {
+                            if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -98,9 +96,9 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "del tipo de dato String o int");
+                            imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "del tipo de dato String o int");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 3:
@@ -111,34 +109,34 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 4:
                         //Si es una coma 
-                        if (tokenAnalizado == 500) {
+                        if (tokenAnalizado == obtenerTokenn(",")) {
                             estado = 5;
-                        } else if (tokenAnalizado == 102 || tokenAnalizado == 103) {
+                        } else if (tokenAnalizado == obtenerTokenn("int") || tokenAnalizado == obtenerTokenn("String")) {
                             estado = 3;
-                        } else if (tokenAnalizado == 105) {
+                        } else if (tokenAnalizado == obtenerTokenn("printf")) {
                             estado = 6;
 
-                        } else if (tokenAnalizado == 106) {
+                        } else if (tokenAnalizado == obtenerTokenn("captura")) {
                             estado = 13;
 
                         } else if (tokenAnalizado > 0 && tokenAnalizado < 100) {
                             estado = 16;
 
-                        } else if (tokenAnalizado == 104) {
+                        } else if (tokenAnalizado == obtenerTokenn("do")) {
                             estado = 20;
 
-                        } else if (tokenAnalizado == 108) {
+                        } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
-                         //    System.out.println("Paso por el estado " + estado);
+                            //    System.out.println("Paso por el estado " + estado);
                             System.out.println("Programa compilado correctamente");
-                            if (i == cadenas.size()-1) {
+                            if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                             }
 
@@ -146,10 +144,10 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje("Se esperaba un inicio de sentencia o declaración de variables", "");
+                            imprimirErrorMensaje("Se esperaba un inicio de sentencia o declaración de variables", "");
                         }
 
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 5:
@@ -160,56 +158,55 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 6:
                         //Si es parentesis
-                        if (tokenAnalizado == 501) {
+                        if (tokenAnalizado == obtenerTokenn("(")) {
                             estado = 7;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, " ( ");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, " ( ");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 7:
                         //Si comilla
-                        if (tokenAnalizado == 503) {
+                        if (tokenAnalizado == obtenerTokenn("\"")) {
                             estado = 9;
                         } else if (tokenAnalizado > 0 && tokenAnalizado < 100) {
                             estado = 8;
-                        } else if (tokenAnalizado ==502) {
-                            estado = 12;
-                        }
-                        else {
-                            estado = 400;
-                            estadoError = true;
-                            imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "  o se esteraba "+MENSAJE_ERROR_SIMBOLO + "\"");
-                        }
-                         //System.out.println("Paso por el estado " + estado);
-                        break;
-
-                    case 8:
-                        //Si concatenacion de cadenas osea un +
-                        if (tokenAnalizado == 800) {
-                            estado = 7;
-                        } else if (tokenAnalizado == 502) {
+                        } else if (tokenAnalizado == obtenerTokenn(")")) {
                             estado = 12;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "  o se esteraba " + MENSAJE_ERROR_SIMBOLO + "\"");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
+                        break;
+
+                    case 8:
+                        //Si concatenacion de cadenas osea un +
+                        if (tokenAnalizado == obtenerTokenn("+")) {
+                            estado = 7;
+                        } else if (tokenAnalizado == obtenerTokenn(")")) {
+                            estado = 12;
+                        } else {
+                            estado = 400;
+                            estadoError = true;
+                            imprimirError(i + 1);
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
+                        }
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 9:
@@ -222,12 +219,12 @@ public class AutomataSintactico {
                             imprimirError(i + 1);
                             imprimirErrorMensaje(MENSAJE_ERROR_CADENA_CARACTERES, "");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 10:
                         //Si comilla
-                        if (tokenAnalizado == 503) {
+                        if (tokenAnalizado == obtenerTokenn("\"")) {
                             estado = 11;
                         } else {
                             estado = 400;
@@ -235,35 +232,35 @@ public class AutomataSintactico {
                             imprimirError(i + 1);
                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\"");
                         }
-                         //System.out.println("Paso por el estado " + estado);
+                        //System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 11:
                         //Si concatenacion de cadenas osea un +
-                        if (tokenAnalizado == 800) {
+                        if (tokenAnalizado == obtenerTokenn("+")) {
                             estado = 7;
-                        } else if (tokenAnalizado == 502) {
+                        } else if (tokenAnalizado == obtenerTokenn(")")) {
                             estado = 12;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
                         }
                         // System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 12:
                         //Si termina con ;
-                        if (tokenAnalizado == 504) {
+                        if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 4;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                                  imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";"+" es decir fin de sentencia");
-                             
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";" + " es decir fin de sentencia");
+
                         }
                         // System.out.println("Paso por el estado " + estado);
                         break;
@@ -275,20 +272,20 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
                         }
 
                         break;
 
                     case 14:
-                        if (tokenAnalizado == 504) {
+                        if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 4;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";"+" es decir fin de sentencia");
-                            
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";" + " es decir fin de sentencia");
+
                         }
 
                         break;
@@ -298,14 +295,14 @@ public class AutomataSintactico {
                         break;
 
                     case 16:
-                        if (tokenAnalizado == 505) {
+                        if (tokenAnalizado == obtenerTokenn("=")) {
                             estado = 17;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "=" );
-                            
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "=");
+
                         }
 
                         break;
@@ -317,22 +314,21 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
                         }
 
                         break;
-                        
 
                     case 18:
-                        if (tokenAnalizado == 800 || tokenAnalizado == 801) {
+                        if (tokenAnalizado == obtenerTokenn("+") || tokenAnalizado == obtenerTokenn("-")) {
                             estado = 17;
-                        } else if (tokenAnalizado == 504) {
+                        } else if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 4;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";"+" es decir fin de sentencia o se esperaba un operador" );
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";" + " es decir fin de sentencia o se esperaba un operador");
                         }
 
                         break;
@@ -343,15 +339,15 @@ public class AutomataSintactico {
 //COMIENZA EL DESMADRE
                     case 20:
 
-                        if (tokenAnalizado == 105) {
+                        if (tokenAnalizado == obtenerTokenn("printf")) {
                             estado = 21;
 
-                        } else if (tokenAnalizado == 106) {
+                        } else if (tokenAnalizado == obtenerTokenn("captura")) {
                             estado = 28;
 
                         } else if (tokenAnalizado > 0 && tokenAnalizado < 100) {
                             estado = 30;
-                        } else if (tokenAnalizado == 107) {
+                        } else if (tokenAnalizado == obtenerTokenn("while")) {
                             estado = 38;
 
                         } else {
@@ -359,56 +355,56 @@ public class AutomataSintactico {
                             estadoError = true;
                             imprimirError(i + 1);
                             imprimirErrorMensaje("Se esperaba un inicio de sentencia o declaración de variables", "");
-                             imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "while");
+                            imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "while");
                         }
 
-                       //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 21:
                         //Si es parentesis
-                        if (tokenAnalizado == 501) {
+                        if (tokenAnalizado == obtenerTokenn("(")) {
                             estado = 22;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, " ( ");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, " ( ");
                         }
-                       //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 22:
                         //Si comilla
-                        if (tokenAnalizado == 503) {
+                        if (tokenAnalizado == obtenerTokenn("\"")) {
                             estado = 24;
                         } else if (tokenAnalizado > 0 && tokenAnalizado < 100) {
                             estado = 23;
-                        } else if (tokenAnalizado ==502) {
+                        } else if (tokenAnalizado == obtenerTokenn(")")) {
                             estado = 27;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "  o se esteraba "+MENSAJE_ERROR_SIMBOLO + "\"");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, "  o se esteraba " + MENSAJE_ERROR_SIMBOLO + "\"");
                         }
                         // System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 23:
                         //Si concatenacion de cadenas osea un +
-                        if (tokenAnalizado == 800) {
+                        if (tokenAnalizado == obtenerTokenn("+")) {
                             estado = 22;
-                        } else if (tokenAnalizado == 502) {
+                        } else if (tokenAnalizado == obtenerTokenn(")")) {
                             estado = 27;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
                         }
-                       //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 24:
@@ -426,44 +422,44 @@ public class AutomataSintactico {
 
                     case 25:
                         //Si comilla
-                        if (tokenAnalizado == 503) {
+                        if (tokenAnalizado == obtenerTokenn("\"")) {
                             estado = 26;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                              imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\"");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\"");
                         }
-                       //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 26:
                         //Si concatenacion de cadenas osea un +
-                        if (tokenAnalizado == 800) {
+                        if (tokenAnalizado == obtenerTokenn("+")) {
                             estado = 22;
-                        } else if (tokenAnalizado == 502) {
+                        } else if (tokenAnalizado == obtenerTokenn(")")) {
                             estado = 27;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "+");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "(");
                         }
-                      //   System.out.println("Paso por el estado " + estado);
+                        //   System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 27:
                         //Si termina con ;
-                        if (tokenAnalizado == 504) {
+                        if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 20;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                                imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";"+" es decir fin de sentencia");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";" + " es decir fin de sentencia");
                         }
-                      //   System.out.println("Paso por el estado " + estado);
+                        //   System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 28:
@@ -473,25 +469,25 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                               imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
+                            imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
                         }
 
                         break;
 
                     case 29:
-                        if (tokenAnalizado == 504) {
+                        if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 20;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";"+" es decir fin de sentencia");
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";" + " es decir fin de sentencia");
                         }
 
                         break;
 
                     case 30:
-                        if (tokenAnalizado == 505) {
+                        if (tokenAnalizado == obtenerTokenn("=")) {
                             estado = 31;
                         } else {
                             estado = 400;
@@ -513,15 +509,15 @@ public class AutomataSintactico {
                         break;
 
                     case 32:
-                        if (tokenAnalizado == 800 || tokenAnalizado == 801) {
+                        if (tokenAnalizado == obtenerTokenn("+") || tokenAnalizado == obtenerTokenn("-")) {
                             estado = 31;
-                        } else if (tokenAnalizado == 504) {
+                        } else if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 20;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                              imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";"+" es decir fin de sentencia o se esperaba un operador" );
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, ";" + " es decir fin de sentencia o se esperaba un operador");
                         }
 
                         break;
@@ -539,13 +535,13 @@ public class AutomataSintactico {
                             estadoError = true;
                             imprimirError(i + 1);
                             imprimirErrorMensaje(MENSAJE_ERROR_IDENTIFICADOR, " ");
-                            
+
                         }
 
                         break;
 
                     case 39:
-                        if (tokenAnalizado == 507) {
+                        if (tokenAnalizado == obtenerTokenn("==")) {
                             estado = 40;
                         } else {
                             estado = 400;
@@ -557,15 +553,15 @@ public class AutomataSintactico {
                         break;
 
                     case 40:
-                        if (tokenAnalizado == 503) {
+                        if (tokenAnalizado == obtenerTokenn("\"")) {
                             estado = 41;
-                        } else if (tokenAnalizado == 508) {
+                        } else if (tokenAnalizado == obtenerTokenn("'")) {
                             estado = 43;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\"  o '" );
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\"  o '");
                         }
 
                         break;
@@ -577,19 +573,19 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                            imprimirErrorMensaje(MENSAJE_ERROR_CADENA_CARACTERES, "" );
+                            imprimirErrorMensaje(MENSAJE_ERROR_CADENA_CARACTERES, "");
                         }
-                       //  System.out.println("Paso por el estado " + estado);
+                        //  System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 42:
-                        if (tokenAnalizado == 503) {
+                        if (tokenAnalizado == obtenerTokenn("\"")) {
                             estado = 4;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\" " );
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, "\" ");
                         }
 
                         break;
@@ -601,28 +597,29 @@ public class AutomataSintactico {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_CADENA_CARACTERES, "" );
+                            imprimirErrorMensaje(MENSAJE_ERROR_CADENA_CARACTERES, "");
+                            
                         }
-                      //   System.out.println("Paso por el estado " + estado);
+                        //   System.out.println("Paso por el estado " + estado);
                         break;
 
                     case 44:
-                        if (tokenAnalizado == 508) {
+                        if (tokenAnalizado == obtenerTokenn("'")) {
                             estado = 4;
                         } else {
                             estado = 400;
                             estadoError = true;
                             imprimirError(i + 1);
-                             imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, " '" );
+                            imprimirErrorMensaje(MENSAJE_ERROR_SIMBOLO, " '");
                         }
 
                         break;
 
                     case 200:
                         //Estado de aceptacion
-                        i = cadenas.size();
+                        i = objetosCadenas.size();
                         estadoAceptacion = true;
-                        if (i == cadenas.size()) {
+                        if (i == objetosCadenas.size()) {
                             terminadoEnFinalizar = true;
                         }
 
@@ -650,25 +647,42 @@ public class AutomataSintactico {
         }
 
     }
+    
+    private int obtenerTokenn(String lexema) {
+        int valorToken = 0;
+        for (int i = 0; i < simbologia.size(); i++) {
+            if (simbologia.get(i).getLexema()== lexema) {
+                valorToken = simbologia.get(i).getToken();
+            }
+        }
+        
+        return valorToken;
+    }
+    
 
     public void imprimirError(int posicion) {
-        System.out.println("  Tienes un error en la posicion " + (posicion) + ", no se identifico la cadena " + cadenas.get(posicion - 1).getLexema());
+        System.out.println("  Tienes un error en la posicion " + (posicion) + ", no se identifico la cadena " + objetosCadenas.get(posicion - 1).getLexema());
 
     }
 
-   
-    public void imprimirErrorMensaje(String mensaje,String simbolo){
+    public void imprimirErrorMensaje(String mensaje, String simbolo) {
         System.out.println(mensaje + simbolo);
     }
 
-    public ArrayList<Cadena> getCadenas() {
-        return cadenas;
+    public ArrayList<Cadena> getObjetosCadenas() {
+        return objetosCadenas;
     }
 
-    public void setCadenas(ArrayList<Cadena> cadenas) {
-        this.cadenas = cadenas;
+    public void setObjetosCadenas(ArrayList<Cadena> objetosCadenas) {
+        this.objetosCadenas = objetosCadenas;
     }
-    
-    
+
+    public ArrayList<SimbologiaToken> getSimbologia() {
+        return simbologia;
+    }
+
+    public void setSimbologia(ArrayList<SimbologiaToken> simbologia) {
+        this.simbologia = simbologia;
+    }
 
 }

@@ -6,17 +6,18 @@ String texto,texto2
 
 
 do
-printf();
-while =="si"
+printf(a+b);
+printf(a+texto);
+
+while a == "sdsas"
  
+do
+printf();
+while b== "sdsas"
+
 printf ();
 printf ("");
 
 
 
 Finalizar
-
-
-
-
-

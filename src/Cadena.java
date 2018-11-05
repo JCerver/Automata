@@ -10,18 +10,18 @@ public class Cadena {
     int posicion;
     String lexema;
     int tokenAsignado;
-    String tipoCadena;
+    String metaDato; 
     String tipoDato;
      
-     
+      
     public Cadena() {
     }
 
-    public Cadena(int posicion, String cadenaLeida, int tokenAsignado, String tipoCadena, String tipoDato) {
+    public Cadena(int posicion, String cadenaLeida, int tokenAsignado, String metadato, String tipoDato) {
         this.posicion = posicion;
         this.lexema = cadenaLeida;
         this.tokenAsignado = tokenAsignado;
-        this.tipoCadena = tipoCadena;
+        this.metaDato = metadato;
         this.tipoDato = tipoDato;
     } 
 
@@ -49,12 +49,12 @@ public class Cadena {
         this.tokenAsignado = tokenAsignado;
     }
 
-    public String getTipoCadena() {
-        return tipoCadena;
+    public String getMetaDato() {
+        return metaDato;
     }
 
-    public void setTipoCadena(String tipoCadena) {
-        this.tipoCadena = tipoCadena;
+    public void setMetaDato(String metaDato) {
+        this.metaDato = metaDato;
     }
 
     public String getTipoDato() {

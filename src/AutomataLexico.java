@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * @author jcerver
  */
 public class AutomataLexico {
-  
+
     private String cadena = "";
     private int estado;
     private char simbolo;
@@ -37,15 +37,16 @@ public class AutomataLexico {
 
     //Aqui estamos guardando los tokens, es decir 1 Iniciar Palabra_reservada, 2 Iniciar Palabra_Reservada, etc
     // el numero del token es la posicion del arreglo, la palbra leida estará en tokens1, lo que es esa palabra leida estara en tokens2
-    
+    public ArrayList<Cadena> objetosCadenas = new ArrayList();
 
-    public ArrayList<Cadena> cadenas = new ArrayList();
+    ArrayList<SimbologiaToken> simbologia;
 
     int contadorGlobal;
 
-    public AutomataLexico(String cadena) {
+    public AutomataLexico(String cadena, ArrayList<SimbologiaToken> simbologia) {
         this.cadena = cadena;
         this.estado = 0;
+        this.simbologia = new ArrayList<SimbologiaToken>(simbologia);
     }
 
     public void analizar() {
@@ -223,8 +224,13 @@ public class AutomataLexico {
                             analizarSimbolo();
                             estado = 0;
                         } else {
+
                             palabraAnalizada += simbolo;
                             estado = 20;
+
+                            if (i == (cadena.length() - 1)) {
+                                analizarCadenaConstantes();
+                            }
                         }
 
                         break;
@@ -250,6 +256,7 @@ public class AutomataLexico {
             }
 
         }
+
     }
 
     private boolean isSimbolo(String s) {
@@ -287,9 +294,9 @@ public class AutomataLexico {
             palabrasReservadasAnalizadas.add(palabraAnalizada);
             Cadena cadena = new Cadena();
             cadena.setLexema(palabraAnalizada);
-            cadena.setTipoCadena("Palabra Reservada");
+            cadena.setMetaDato("Palabra Reservada");
 
-            cadenas.add(cadena);
+            objetosCadenas.add(cadena);
 
             //tokens1.add(palabraAnalizada);
             //tokens2.add("Palabra Reservada");
@@ -324,10 +331,9 @@ public class AutomataLexico {
 
             Cadena cadena = new Cadena();
             cadena.setLexema(palabraAnalizada);
-            cadena.setTipoCadena("Identificador");
+            cadena.setMetaDato("Identificador");
             cadena.setTokenAsignado(valorToken + 1);
-            cadenas.add(cadena);
-
+            objetosCadenas.add(cadena);
 
         }
         palabraAnalizada = "";
@@ -338,9 +344,9 @@ public class AutomataLexico {
 
         Cadena cadena = new Cadena();
         cadena.setLexema(palabraAnalizada);
-        cadena.setTipoCadena("Número");
+        cadena.setMetaDato("Número");
         cadena.setTokenAsignado(3);
-        cadenas.add(cadena);
+        objetosCadenas.add(cadena);
         palabraAnalizada = "";
     }
 
@@ -374,9 +380,9 @@ public class AutomataLexico {
 
         Cadena cadena = new Cadena();
         cadena.setLexema(palabraAnalizada);
-        cadena.setTipoCadena("Cadena de Constantes");
+        cadena.setMetaDato("Cadena de Constantes");
         cadena.setTokenAsignado(valorToken + 300);
-        cadenas.add(cadena);
+        objetosCadenas.add(cadena);
 
 //        for (int i =  i < cadenasDeConstantesAnalizadas.size(); i++) {
 //            if (cadenasDeConstantesAnalizadas.get(i).equals(palabraAnalizada)) {
@@ -388,101 +394,100 @@ public class AutomataLexico {
 
     private void analizarSimbolo() {
         simbolosAnalizados.add(palabraAnalizada);
-        
+
         Cadena cadena = new Cadena();
         cadena.setLexema(palabraAnalizada);
-        cadena.setTipoCadena("Simbolo");
-        cadenas.add(cadena);
-        
+        cadena.setMetaDato("Simbolo");
+        objetosCadenas.add(cadena);
+
         guardarTokenCorrespondiente();
         palabraAnalizada = "";
     }
 
     private void analizarOperador() {
         operadoresAnalizados.add(palabraAnalizada);
-        
-        
+
         Cadena cadena = new Cadena();
         cadena.setLexema(palabraAnalizada);
-        cadena.setTipoCadena("Operador");
-        cadenas.add(cadena);
-        
+        cadena.setMetaDato("Operador");
+        objetosCadenas.add(cadena);
+
         guardarTokenDeOperador();
         palabraAnalizada = "";
     }
 
     public void guardarTokenCorrespondiente() {
-        cadenas.size();
+        objetosCadenas.size();
+        int valorToken = 0;
 
         switch (palabraAnalizada) {
             case "Iniciar":
-
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(100);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("Iniciar"));
 
                 //identificadorToken.add(100);
                 break;
             case "Variables":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(101);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("Variables"));
                 //identificadorToken.add(101);
                 break;
             case "int":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(102);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("int"));
                 //identificadorToken.add(102);
                 break;
             case "String":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(103);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("String"));
                 //identificadorToken.add(103);
                 break;
             case "do":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(104);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("do"));
                 //identificadorToken.add(104);
                 break;
             case "printf":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(105);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("printf"));
                 //identificadorToken.add(105);
                 break;
             case "captura":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(106);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("captura"));
                 //identificadorToken.add(106);
                 break;
             case "while":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(107);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("while"));
                 //identificadorToken.add(107);
                 break;
             case "Finalizar":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(108);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("Finalizar"));
                 //identificadorToken.add(108);
                 break;
             case ",":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(500);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn(","));
                 //identificadorToken.add(500);
                 break;
             case "(":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(501);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("("));
                 //identificadorToken.add(501);
                 break;
             case ")":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(502);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn(")"));
                 //identificadorToken.add(502);
                 break;
             case "\"":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(503);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("\""));
                 //identificadorToken.add(503);
                 break;
             case ";":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(504);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn(";"));
                 // identificadorToken.add(504);
                 break;
             case "=":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(505);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("="));
                 //identificadorToken.add(505);
                 break;
             case "==":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(507);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("=="));
                 // identificadorToken.add(507);
                 break;
             case "'":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(508);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("'"));
                 //identificadorToken.add(508);
                 break;
 
@@ -490,13 +495,24 @@ public class AutomataLexico {
 
     }
 
+    private int obtenerTokenn(String lexema) {
+        int valorToken = 0;
+        for (int i = 0; i < simbologia.size(); i++) {
+            if (simbologia.get(i).getLexema() == lexema) {
+                valorToken = simbologia.get(i).getToken();
+            }
+        }
+
+        return valorToken;
+    }
+
     private void guardarTokenDeOperador() {
         switch (palabraAnalizada) {
             case "+":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(800);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("+"));
                 break;
             case "-":
-                cadenas.get(cadenas.size() - 1).setTokenAsignado(801);
+                objetosCadenas.get(objetosCadenas.size() - 1).setTokenAsignado(obtenerTokenn("-"));
                 break;
 
         }
@@ -582,17 +598,61 @@ public class AutomataLexico {
         this.erroresAnalizados = erroresAnalizados;
     }
 
-    public ArrayList<Cadena> getCadenas() {
-        return cadenas;
+    public ArrayList<Cadena> getObjetosCadenas() {
+        return objetosCadenas;
     }
 
-    public void setCadenas(ArrayList<Cadena> cadenas) {
-        this.cadenas = cadenas;
+    public void setObjetosCadenas(ArrayList<Cadena> objetosCadenas) {
+        this.objetosCadenas = objetosCadenas;
     }
 
-   
-    
-    
-    
+    void colocarTipo() {
+        boolean puedeSerInt = false;
+        boolean puedeSerString = false;
+        boolean finDeclaracionVariables = false;
+        
+
+        for (int i = 0; i < objetosCadenas.size(); i++) {
+            
+            
+            
+            
+            
+            
+            if(
+                    !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("Iniciar") )
+                 &&   !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("Variables") )
+                  &&  !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("int") )
+                 && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("String") )
+                  && !(objetosCadenas.get(i).getMetaDato().equals("Identificador") )
+                  && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn(","))){
+                break;  
+            }
+            
+            
+            
+            if (objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("int")) {
+                puedeSerInt = true;
+                puedeSerString = false;
+            } else if (objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("String")) {
+                puedeSerInt = false;
+                puedeSerString = true;
+            }
+
+            if (puedeSerInt) {
+                if (objetosCadenas.get(i).getMetaDato().equals("Identificador")) {
+                    objetosCadenas.get(i).setTipoDato("int");
+                }
+            } else if (puedeSerString) {
+                if (objetosCadenas.get(i).getMetaDato().equals("Identificador")) {
+                    objetosCadenas.get(i).setTipoDato("String");
+                }
+            }
+
+           
+            
+
+        }
+    }
 
 }
