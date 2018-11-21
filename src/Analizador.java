@@ -23,20 +23,22 @@ public class Analizador {
     ArrayList<String> cadenasDeConstantesAnalizadas;
     ArrayList<SimbologiaToken> simbologia;
 
-    ArrayList<String> palabrasReservadas;
-    ArrayList<String> simbolos;
     ArrayList<String> errores;
 
     boolean isError;
     String cadenasPrograma = "";
 
     AutomataSintactico automataSintactico;
+    AnalizadorSemantico analizadorSemantico;
 
     public ArrayList<Cadena> objetosCadenas = new ArrayList();
+    
+    boolean lexicoCorrecto=false ;
+    boolean sintacticoCorrecto =false ;
+    boolean semanticoCorrecto =false;
+    
 
     public Analizador() {
-        palabrasReservadas = new ArrayList<String>();
-        simbolos = new ArrayList<String>();
         simbologia = new ArrayList<SimbologiaToken>();
         generarSimbologia();
     }
@@ -69,20 +71,29 @@ public class Analizador {
     }
 
     public void leer() {
-        abrirArchivo();
         separarCadenasConAutomataLexico(this.cadenasPrograma);
-        imprimirPalabras();
-        llamarAnalizadorSintactico();
-    }
-
-    void abrirArchivo() {
         
-
-
+        if(lexicoCorrecto){
+            llamarAnalizadorSintactico();
+            
+            if(sintacticoCorrecto){
+                
+                llamaAnalizadorSemantico();
+                if(semanticoCorrecto){
+                    
+                }
+            }
+            
+        }
+        imprimirPalabras();
+        
+        
+        
     }
 
+    
     public void leerPrograma() {
-
+ 
         String aux = "";
         try {
             JFileChooser jfc = new JFileChooser();
@@ -114,7 +125,8 @@ public class Analizador {
         
         automatalexico.analizar();
         automatalexico.colocarTipo();
-
+        automatalexico.colocarLosDemasTipos();
+        
         this.caracteresAnalizados = new ArrayList<String>(automatalexico.getCaracteresAnalizados());
 
         this.palabrasReservadasAnalizadas = new ArrayList<String>(automatalexico.getPalabrasReservadasAnalizadas());
@@ -127,18 +139,18 @@ public class Analizador {
         this.objetosCadenas = new ArrayList<Cadena>(automatalexico.getObjetosCadenas());
         
         
+        
+        if(automatalexico.isLexicoCorrecto()){
+            lexicoCorrecto=true;
+        }
 
     }
 
     void imprimirPalabras() {
-        for (int i = 0; i < palabrasReservadas.size(); i++) {
-            System.out.println(palabrasReservadas.get(i));
-        }
+        
 
-        for (int i = 0; i < simbolos.size(); i++) {
-            System.out.println(simbolos.get(i));
-        }
-        System.out.println(cadenasPrograma);
+        
+        System.out.println("Cadenas del programa: "+cadenasPrograma);
 
         for (int i = 0; i < palabrasReservadasAnalizadas.size(); i++) {
             System.out.println(palabrasReservadasAnalizadas.get(i) + "        es palabra reservada");
@@ -174,7 +186,7 @@ public class Analizador {
     }
 
     /* public boolean programa(String cadena){
-        if(cadena.equals("Iniciar")){
+        if(cadena.eq uals("Iniciar")){ 
             return true; //se lerá palabra por palabra de un archivo hasta que finalice
         }
     }*/
@@ -184,10 +196,20 @@ public class Analizador {
         automataSintactico.setObjetosCadenas(new ArrayList<Cadena>(this.objetosCadenas));
         automataSintactico.setSimbologia(simbologia);
         automataSintactico.automata();
-        System.out.println("Probando github");
+        //System.out.println("Probando github");
         
-        
+        if(automataSintactico.isSintacticoCorrecto()){
+            sintacticoCorrecto=true;
+        }
 
+    }
+    
+    private void llamaAnalizadorSemantico(){
+        analizadorSemantico=new AnalizadorSemantico();
+        analizadorSemantico.setObjetosCadenas(new ArrayList<Cadena>(this.objetosCadenas));
+        
+        analizadorSemantico.iniciar();
+   
     }
 
     public static void main(String[] args) {

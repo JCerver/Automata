@@ -2,7 +2,8 @@
 import java.util.ArrayList;
 
 public class AutomataSintactico {
-
+    boolean sintacticoCorrecto =false ;
+    
     boolean estadoAceptacion;
     int tokenAnalizado, estado;
 
@@ -138,6 +139,7 @@ public class AutomataSintactico {
                             System.out.println("Programa compilado correctamente");
                             if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
+                                sintacticoCorrecto =true;
                             }
 
                         } else {
@@ -684,5 +686,15 @@ public class AutomataSintactico {
     public void setSimbologia(ArrayList<SimbologiaToken> simbologia) {
         this.simbologia = simbologia;
     }
+
+    public boolean isSintacticoCorrecto() {
+        return sintacticoCorrecto;
+    }
+
+    public void setSintacticoCorrecto(boolean sintacticoCorrecto) {
+        this.sintacticoCorrecto = sintacticoCorrecto;
+    }
+    
+    
 
 }

@@ -13,7 +13,8 @@ import java.util.regex.Pattern;
  * @author jcerver
  */
 public class AutomataLexico {
-
+    boolean lexicoCorrecto=true ;
+    
     private String cadena = "";
     private int estado;
     private char simbolo;
@@ -38,6 +39,7 @@ public class AutomataLexico {
     //Aqui estamos guardando los tokens, es decir 1 Iniciar Palabra_reservada, 2 Iniciar Palabra_Reservada, etc
     // el numero del token es la posicion del arreglo, la palbra leida estará en tokens1, lo que es esa palabra leida estara en tokens2
     public ArrayList<Cadena> objetosCadenas = new ArrayList();
+    public ArrayList<Cadena> arregloComodin = new ArrayList();
 
     ArrayList<SimbologiaToken> simbologia;
 
@@ -610,27 +612,18 @@ public class AutomataLexico {
         boolean puedeSerInt = false;
         boolean puedeSerString = false;
         boolean finDeclaracionVariables = false;
-        
 
         for (int i = 0; i < objetosCadenas.size(); i++) {
-            
-            
-            
-            
-            
-            
-            if(
-                    !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("Iniciar") )
-                 &&   !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("Variables") )
-                  &&  !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("int") )
-                 && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("String") )
-                  && !(objetosCadenas.get(i).getMetaDato().equals("Identificador") )
-                  && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn(","))){
-                break;  
+
+            if (!(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("Iniciar"))
+                    && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("Variables"))
+                    && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("int"))
+                    && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("String"))
+                    && !(objetosCadenas.get(i).getMetaDato().equals("Identificador"))
+                    && !(objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn(","))) {
+                break;
             }
-            
-            
-            
+
             if (objetosCadenas.get(i).getTokenAsignado() == obtenerTokenn("int")) {
                 puedeSerInt = true;
                 puedeSerString = false;
@@ -642,17 +635,65 @@ public class AutomataLexico {
             if (puedeSerInt) {
                 if (objetosCadenas.get(i).getMetaDato().equals("Identificador")) {
                     objetosCadenas.get(i).setTipoDato("int");
+
+                    Cadena c = new Cadena();
+                    c.setLexema(objetosCadenas.get(i).getLexema());
+                    c.setTokenAsignado(objetosCadenas.get(i).getTokenAsignado());
+                    c.setMetaDato(objetosCadenas.get(i).getMetaDato());
+                    c.setTipoDato("int");
+                    arregloComodin.add(c);
                 }
             } else if (puedeSerString) {
                 if (objetosCadenas.get(i).getMetaDato().equals("Identificador")) {
                     objetosCadenas.get(i).setTipoDato("String");
+
+                    Cadena c = new Cadena();
+                    c.setLexema(objetosCadenas.get(i).getLexema());
+                    c.setTokenAsignado(objetosCadenas.get(i).getTokenAsignado());
+                    c.setMetaDato(objetosCadenas.get(i).getMetaDato());
+                    c.setTipoDato("String");
+                    arregloComodin.add(c);
+
                 }
             }
 
-           
-            
-
         }
     }
+
+    void colocarLosDemasTipos() {
+       /* for (int i = 0; i < arregloComodin.size(); i++) {
+            System.out.println(i + "            " + arregloComodin.get(i).getLexema()
+                    + "                      " + arregloComodin.get(i).getTokenAsignado() 
+                    + "                          " + arregloComodin.get(i).getMetaDato()
+                    + "                    " + arregloComodin.get(i).getTipoDato());
+            
+        }
+        
+        */
+       
+        for (int i = 0; i < objetosCadenas.size(); i++) {
+            if (objetosCadenas.get(i).getMetaDato().equals("Identificador")) {
+
+                for (int j = 0; j < arregloComodin.size(); j++) {
+                    if (objetosCadenas.get(i).getTokenAsignado()==arregloComodin.get(j).getTokenAsignado()) {
+                        objetosCadenas.get(i).setTipoDato(arregloComodin.get(j).getTipoDato());
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isLexicoCorrecto() {
+        return lexicoCorrecto;
+    }
+
+    public void setLexicoCorrecto(boolean lexicoCorrecto) {
+        this.lexicoCorrecto = lexicoCorrecto;
+    }
+    
+    
+    
+    
 
 }

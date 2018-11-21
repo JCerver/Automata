@@ -1,13 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author jcerver
- */
+import java.util.ArrayList;
+
+
 public class AnalizadorSemantico {
+    boolean semanticoCorrecto =false;
+    
+    public ArrayList<Cadena> objetosCadenas = new ArrayList();
+    ArrayList<SimbologiaToken> simbologia;
+    
+    public AnalizadorSemantico() {
+    
+    }
+    
+    
+    
+    
+    
+    public void iniciar(){
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    public ArrayList<Cadena> getObjetosCadenas() {
+        return objetosCadenas;
+    }
+
+    public void setObjetosCadenas(ArrayList<Cadena> objetosCadenas) {
+        this.objetosCadenas = objetosCadenas;
+    }
+    
+    
+   
+    
+    
+    
+    
+    
+    
     
 }
