@@ -3,15 +3,18 @@ Iniciar
 Variables 
 int a,b
 String texto,texto2
-
+String otravariable
 
 do
-printf(a+b);
+printf(a+otravariable);
 printf("El resultdo es: "+a+texto);
 
 while a == "sdsas"
  
 do
+
+variableEntera1=variableEntera2;
+
 printf();
 while b== "sdsas"
 

@@ -12,9 +12,11 @@ public class Cadena {
     int tokenAsignado;
     String metaDato; 
     String tipoDato;
+    String valorInicial;
      
       
     public Cadena() {
+        
     }
 
     public Cadena(int posicion, String cadenaLeida, int tokenAsignado, String metadato, String tipoDato) {
@@ -25,6 +27,18 @@ public class Cadena {
         this.tipoDato = tipoDato;
     } 
 
+    public Cadena(int posicion, String lexema, int tokenAsignado, String metaDato, String tipoDato, String valorInicial) {
+        this.posicion = posicion;
+        this.lexema = lexema;
+        this.tokenAsignado = tokenAsignado;
+        this.metaDato = metaDato;
+        this.tipoDato = tipoDato;
+        this.valorInicial = valorInicial;
+    }
+
+    
+    
+    
     public int getPosicion() {
         return posicion;
     }
@@ -63,6 +77,14 @@ public class Cadena {
 
     public void setTipoDato(String tipoDato) {
         this.tipoDato = tipoDato;
+    }
+
+    public String getValorInicial() {
+        return valorInicial;
+    }
+
+    public void setValorInicial(String valorInicial) {
+        this.valorInicial = valorInicial;
     }
     
     

@@ -13,8 +13,9 @@ import java.util.regex.Pattern;
  * @author jcerver
  */
 public class AutomataLexico {
-    boolean lexicoCorrecto=true ;
-    
+
+    boolean lexicoCorrecto = true;
+
     private String cadena = "";
     private int estado;
     private char simbolo;
@@ -661,7 +662,9 @@ public class AutomataLexico {
     }
 
     void colocarLosDemasTipos() {
-       /* for (int i = 0; i < arregloComodin.size(); i++) {
+
+        colocarValoresDefault();
+        /* for (int i = 0; i < arregloComodin.size(); i++) {
             System.out.println(i + "            " + arregloComodin.get(i).getLexema()
                     + "                      " + arregloComodin.get(i).getTokenAsignado() 
                     + "                          " + arregloComodin.get(i).getMetaDato()
@@ -669,18 +672,25 @@ public class AutomataLexico {
             
         }
         
-        */
-       
+         */
+
         for (int i = 0; i < objetosCadenas.size(); i++) {
             if (objetosCadenas.get(i).getMetaDato().equals("Identificador")) {
 
                 for (int j = 0; j < arregloComodin.size(); j++) {
-                    if (objetosCadenas.get(i).getTokenAsignado()==arregloComodin.get(j).getTokenAsignado()) {
+                    if (objetosCadenas.get(i).getTokenAsignado() == arregloComodin.get(j).getTokenAsignado()) {
                         objetosCadenas.get(i).setTipoDato(arregloComodin.get(j).getTipoDato());
                         break;
                     }
                 }
             }
+        }
+    }
+
+    void colocarValoresDefault() {
+        for (int i = 0; i < objetosCadenas.size(); i++) {
+            objetosCadenas.get(i).setTipoDato("null");
+            objetosCadenas.get(i).setValorInicial("null");
         }
     }
 
@@ -691,9 +701,5 @@ public class AutomataLexico {
     public void setLexicoCorrecto(boolean lexicoCorrecto) {
         this.lexicoCorrecto = lexicoCorrecto;
     }
-    
-    
-    
-    
 
 }

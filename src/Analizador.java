@@ -37,6 +37,10 @@ public class Analizador {
     boolean sintacticoCorrecto =false ;
     boolean semanticoCorrecto =false;
     
+    
+     private ArrayList<ObjetoDeclaracion> listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>();
+
+     
 
     public Analizador() {
         simbologia = new ArrayList<SimbologiaToken>();
@@ -85,7 +89,7 @@ public class Analizador {
             }
             
         }
-        imprimirPalabras();
+        //imprimirPalabras();
         
         
         
@@ -127,6 +131,10 @@ public class Analizador {
         automatalexico.colocarTipo();
         automatalexico.colocarLosDemasTipos();
         
+        this.objetosCadenas = new ArrayList<Cadena>(automatalexico.getObjetosCadenas());
+        
+        
+        
         this.caracteresAnalizados = new ArrayList<String>(automatalexico.getCaracteresAnalizados());
 
         this.palabrasReservadasAnalizadas = new ArrayList<String>(automatalexico.getPalabrasReservadasAnalizadas());
@@ -136,7 +144,7 @@ public class Analizador {
         this.operadoresAnalizados = new ArrayList<String>(automatalexico.getOperadoresAnalizados());
         this.cadenasDeConstantesAnalizadas = new ArrayList<String>(automatalexico.getCadenasDeConstantesAnalizadas());
 
-        this.objetosCadenas = new ArrayList<Cadena>(automatalexico.getObjetosCadenas());
+        
         
         
         
@@ -207,11 +215,40 @@ public class Analizador {
     private void llamaAnalizadorSemantico(){
         analizadorSemantico=new AnalizadorSemantico();
         analizadorSemantico.setObjetosCadenas(new ArrayList<Cadena>(this.objetosCadenas));
+        analizadorSemantico.setSimbologia(new ArrayList<SimbologiaToken>(this.simbologia));
         
+        analizadorSemantico.imprimirValoresRecibidos();
+                
+                
         analizadorSemantico.iniciar();
+        
+        analizadorSemantico.imprimirIdentificadoresNoDeclarados();
+        
+        
+        this.listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>(analizadorSemantico.getListaObjetosDeclaraciones());
+         
+        imprimirDeclaraciones();
+        
    
     }
 
+    
+    void imprimirDeclaraciones() {
+        for (int i = 0; i < listaObjetosDeclaraciones.size(); i++) {
+
+            ObjetoDeclaracion od = listaObjetosDeclaraciones.get(i);
+            int tamaño = od.getObjetosCadenas().size();
+
+            for (int cont = 0; cont< tamaño; cont++) {
+                System.out.print(od.getObjetosCadenas().get(cont).getLexema());
+            }
+
+            System.out.println("");
+        }
+
+    }
+    
+    
     public static void main(String[] args) {
         Analizador test = new Analizador();
         test.leerPrograma();
