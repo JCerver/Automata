@@ -15,6 +15,10 @@ do
 
 variableEntera1=variableEntera2;
 
+
+b=a+a+b-texto+texto2;
+b=a-b;
+
 printf();
 while b== "sdsas"
 
@@ -25,6 +29,4 @@ a=texto+b;
 
 
 Finalizar
-
-
 

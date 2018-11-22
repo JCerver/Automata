@@ -227,6 +227,7 @@ public class Analizador {
         
         this.listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>(analizadorSemantico.getListaObjetosDeclaraciones());
          
+        
         imprimirDeclaraciones();
         
    
@@ -234,13 +235,17 @@ public class Analizador {
 
     
     void imprimirDeclaraciones() {
+        System.out.println("");
+        System.out.println("");
+        
         for (int i = 0; i < listaObjetosDeclaraciones.size(); i++) {
 
-            ObjetoDeclaracion od = listaObjetosDeclaraciones.get(i);
-            int tamaño = od.getObjetosCadenas().size();
-
+            ObjetoDeclaracion objetoDeclaracion = listaObjetosDeclaraciones.get(i);
+            int tamaño = objetoDeclaracion.getObjetosCadenas().size();
+            System.out.println("");
+            System.out.println("");
             for (int cont = 0; cont< tamaño; cont++) {
-                System.out.print(od.getObjetosCadenas().get(cont).getLexema());
+                System.out.print(objetoDeclaracion.getObjetosCadenas().get(cont).getLexema());
             }
 
             System.out.println("");

@@ -10,13 +10,13 @@ public class AnalizadorSemantico {
     private ArrayList<SimbologiaToken> simbologia;
 
     public ArrayList<Cadena> declaracion = new ArrayList();
-    private ArrayList<ObjetoDeclaracion> listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>();
+    private ArrayList<ObjetoDeclaracion> listaObjetosDeclaraciones = new ArrayList<>();
 
     boolean estadoAceptacion;
     int tokenAnalizado, estado;
 
     public AnalizadorSemantico() {
-
+         
     }
 
     public void iniciar() {
@@ -58,7 +58,7 @@ public class AnalizadorSemantico {
                         } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
                             //  System.out.println("Paso por el estado " + estado);
-                            System.out.println("Programa compilado correctamente");
+                            //System.out.println("Programa compilado correctamente");
                             if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                             }
@@ -80,7 +80,7 @@ public class AnalizadorSemantico {
                         } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
                             //    System.out.println("Paso por el estado " + estado);
-                            System.out.println("Programa compilado correctamente");
+                            //System.out.println("Programa compilado correctamente");
                             if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                             }
@@ -117,22 +117,22 @@ public class AnalizadorSemantico {
                         } else if (tokenAnalizado > 0 && tokenAnalizado < 100) {
                             estado = 16;
                             declaracion.add(objetosCadenas.get(i));
-                            System.out.println(objetosCadenas.get(i).getLexema());
+                            //System.out.println(objetosCadenas.get(i).getLexema());
                         } else if (tokenAnalizado == obtenerTokenn("Finalizar")) {
                             estado = 200;
                             //    System.out.println("Paso por el estado " + estado);
-                            System.out.println("Programa compilado correctamente");
+                            //System.out.println("Programa compilado correctamente");
                             if (i == objetosCadenas.size() - 1) {
                                 terminadoEnFinalizar = true;
                                 //sintacticoCorrecto =true;
                             }
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         }
 
                         //System.out.println("Paso por el estado " + estado);
@@ -147,7 +147,7 @@ public class AnalizadorSemantico {
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         }
                         //System.out.println("Paso por el estado " + estado);
                         break;
@@ -156,13 +156,13 @@ public class AnalizadorSemantico {
                         if (tokenAnalizado == obtenerTokenn("=")) {
                             estado = 17;
                             declaracion.add(objetosCadenas.get(i));
-                            System.out.println(objetosCadenas.get(i).getLexema());
+                           // System.out.println(objetosCadenas.get(i).getLexema());
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         }
 
                         break;
@@ -171,13 +171,13 @@ public class AnalizadorSemantico {
                         if (tokenAnalizado > 0 && tokenAnalizado < 100) {
                             estado = 18;
                             declaracion.add(objetosCadenas.get(i));
-                            System.out.println(objetosCadenas.get(i).getLexema());
+                            //System.out.println(objetosCadenas.get(i).getLexema());
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         }
 
                         break;
@@ -186,36 +186,38 @@ public class AnalizadorSemantico {
                         if (tokenAnalizado == obtenerTokenn("+") || tokenAnalizado == obtenerTokenn("-")) {
                             estado = 17;
                             declaracion.add(objetosCadenas.get(i));
-                            System.out.println(objetosCadenas.get(i).getLexema());
+                            //System.out.println(objetosCadenas.get(i).getLexema());
                         } else if (tokenAnalizado == obtenerTokenn(";")) {
                             estado = 4;
                             declaracion.add(objetosCadenas.get(i));
 
-                            ObjetoDeclaracion od = new ObjetoDeclaracion(declaracion);
-
+                            ObjetoDeclaracion od = new ObjetoDeclaracion(new ArrayList<Cadena>(declaracion));
+                            //ObjetoDeclaracion od = new ObjetoDeclaracion(declaracion);
+                            
+                            
                             listaObjetosDeclaraciones.add(od);
 
-                            System.out.println(objetosCadenas.get(i).getLexema());
+                            //System.out.println(objetosCadenas.get(i).getLexema());
 
                             //imprimirPrueba();
                             //---------------------------------------------------------------
                             int tamaño = od.getObjetosCadenas().size();
 
-                            System.out.print("Si de guardo el ObjetoDeclaracion       ");
+                            //System.out.print("Si de guardo el ObjetoDeclaracion       ");
                             for (int cont = 0; cont < tamaño; cont++) {
 
-                                System.out.print(od.getObjetosCadenas().get(cont).getLexema());
+                                //System.out.print(od.getObjetosCadenas().get(cont).getLexema());
                             }
                             System.out.println("");
 
                             //---------------------------------------------------------------------
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion.clear();
+                            declaracion = new ArrayList <Cadena> ();
                         }
 
                         break;
@@ -279,7 +281,7 @@ public class AnalizadorSemantico {
                     + "                    " + objetosCadenasIdentificadoresNoDeclarados.get(i).getValorInicial());
         }
     }
-
+/*
     void imprimirDeclaraciones() {
         for (int i = 0; i < listaObjetosDeclaraciones.size(); i++) {
 
@@ -293,7 +295,7 @@ public class AnalizadorSemantico {
             System.out.println("");
         }
 
-    }
+    }*/
 
     void imprimirPrueba() {
         for (int i = 0; i < declaracion.size(); i++) {
