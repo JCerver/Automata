@@ -7,7 +7,7 @@ String otravariable
 
 do
 printf(a+otravariable);
-printf("El resultdo es: "+a+texto);
+printf("El resultado es: "+a+texto);
 
 while a == "sdsas"
  
@@ -25,7 +25,11 @@ while b== "sdsas"
 printf ();
 printf ("");
 
+texto=texto2+texto;
+
 a=texto+b;
+
+
 
 
 Finalizar

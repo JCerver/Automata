@@ -32,15 +32,12 @@ public class Analizador {
     AnalizadorSemantico analizadorSemantico;
 
     public ArrayList<Cadena> objetosCadenas = new ArrayList();
-    
-    boolean lexicoCorrecto=false ;
-    boolean sintacticoCorrecto =false ;
-    boolean semanticoCorrecto =false;
-    
-    
-     private ArrayList<ObjetoDeclaracion> listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>();
 
-     
+    boolean lexicoCorrecto = false;
+    boolean sintacticoCorrecto = false;
+    boolean semanticoCorrecto = false;
+
+    private ArrayList<ObjetoDeclaracion> listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>();
 
     public Analizador() {
         simbologia = new ArrayList<SimbologiaToken>();
@@ -65,39 +62,35 @@ public class Analizador {
         simbologia.add(new SimbologiaToken("Simbolos", ";", 504));
         simbologia.add(new SimbologiaToken("Simbolos", "=", 505));
         simbologia.add(new SimbologiaToken("Simbolos", "==", 506));
-        simbologia.add(new SimbologiaToken("Simbolos", "'", 507));  
-        
+        simbologia.add(new SimbologiaToken("Simbolos", "'", 507));
+
         simbologia.add(new SimbologiaToken("Operador", "+", 800));
         simbologia.add(new SimbologiaToken("Operador", "-", 801));
         simbologia.add(new SimbologiaToken("Operador", "+", 802));
-        
-        
+
     }
 
     public void leer() {
         separarCadenasConAutomataLexico(this.cadenasPrograma);
-        
-        if(lexicoCorrecto){
+
+        if (lexicoCorrecto) {
             llamarAnalizadorSintactico();
-            
-            if(sintacticoCorrecto){
-                
+
+            if (sintacticoCorrecto) {
+
                 llamaAnalizadorSemantico();
-                if(semanticoCorrecto){
-                    
+                if (semanticoCorrecto) {
+
                 }
             }
-            
+
         }
         //imprimirPalabras();
-        
-        
-        
+
     }
 
-    
     public void leerPrograma() {
- 
+
         String aux = "";
         try {
             JFileChooser jfc = new JFileChooser();
@@ -125,16 +118,14 @@ public class Analizador {
     }
 
     void separarCadenasConAutomataLexico(String cadenasProgramas) {//con un automata
-        AutomataLexico automatalexico = new AutomataLexico(cadenasPrograma,simbologia);
-        
+        AutomataLexico automatalexico = new AutomataLexico(cadenasPrograma, simbologia);
+
         automatalexico.analizar();
         automatalexico.colocarTipo();
         automatalexico.colocarLosDemasTipos();
-        
+
         this.objetosCadenas = new ArrayList<Cadena>(automatalexico.getObjetosCadenas());
-        
-        
-        
+
         this.caracteresAnalizados = new ArrayList<String>(automatalexico.getCaracteresAnalizados());
 
         this.palabrasReservadasAnalizadas = new ArrayList<String>(automatalexico.getPalabrasReservadasAnalizadas());
@@ -144,21 +135,15 @@ public class Analizador {
         this.operadoresAnalizados = new ArrayList<String>(automatalexico.getOperadoresAnalizados());
         this.cadenasDeConstantesAnalizadas = new ArrayList<String>(automatalexico.getCadenasDeConstantesAnalizadas());
 
-        
-        
-        
-        
-        if(automatalexico.isLexicoCorrecto()){
-            lexicoCorrecto=true;
+        if (automatalexico.isLexicoCorrecto()) {
+            lexicoCorrecto = true;
         }
 
     }
 
     void imprimirPalabras() {
-        
 
-        
-        System.out.println("Cadenas del programa: "+cadenasPrograma);
+        System.out.println("Cadenas del programa: " + cadenasPrograma);
 
         for (int i = 0; i < palabrasReservadasAnalizadas.size(); i++) {
             System.out.println(palabrasReservadasAnalizadas.get(i) + "        es palabra reservada");
@@ -186,7 +171,7 @@ public class Analizador {
         System.out.println("Posicion      Cadena leida               Token asignado            metadato                      tipo");
         for (int i = 0; i < objetosCadenas.size(); i++) {
             System.out.println(i + "            " + objetosCadenas.get(i).getLexema()
-                    + "                      " + objetosCadenas.get(i).getTokenAsignado() 
+                    + "                      " + objetosCadenas.get(i).getTokenAsignado()
                     + "                          " + objetosCadenas.get(i).getMetaDato()
                     + "                    " + objetosCadenas.get(i).getTipoDato());
         }
@@ -200,60 +185,59 @@ public class Analizador {
     }*/
     public void llamarAnalizadorSintactico() {
         automataSintactico = new AutomataSintactico();
-        
+
         automataSintactico.setObjetosCadenas(new ArrayList<Cadena>(this.objetosCadenas));
         automataSintactico.setSimbologia(simbologia);
         automataSintactico.automata();
         //System.out.println("Probando github");
-        
-        if(automataSintactico.isSintacticoCorrecto()){
-            sintacticoCorrecto=true;
+
+        if (automataSintactico.isSintacticoCorrecto()) {
+            sintacticoCorrecto = true;
         }
 
     }
-    
-    private void llamaAnalizadorSemantico(){
-        analizadorSemantico=new AnalizadorSemantico();
+
+    private void llamaAnalizadorSemantico() {
+        analizadorSemantico = new AnalizadorSemantico();
         analizadorSemantico.setObjetosCadenas(new ArrayList<Cadena>(this.objetosCadenas));
         analizadorSemantico.setSimbologia(new ArrayList<SimbologiaToken>(this.simbologia));
-        
+
         analizadorSemantico.imprimirValoresRecibidos();
-                
-                
+
         analizadorSemantico.iniciar();
-        
+
         analizadorSemantico.imprimirIdentificadoresNoDeclarados();
-        
-        
+
+        analizadorSemantico.analizarDeclaraciones();
+
         this.listaObjetosDeclaraciones = new ArrayList<ObjetoDeclaracion>(analizadorSemantico.getListaObjetosDeclaraciones());
-         
-        
+
         imprimirDeclaraciones();
-        
-   
+
     }
 
-    
     void imprimirDeclaraciones() {
+        System.out.println("Declaraciones leidas");
         System.out.println("");
-        System.out.println("");
-        
+
         for (int i = 0; i < listaObjetosDeclaraciones.size(); i++) {
 
             ObjetoDeclaracion objetoDeclaracion = listaObjetosDeclaraciones.get(i);
-            int tamaño = objetoDeclaracion.getObjetosCadenas().size();
+            int tamaño = objetoDeclaracion.getListaObjetosCadenas().size();
             System.out.println("");
             System.out.println("");
-            for (int cont = 0; cont< tamaño; cont++) {
-                System.out.print(objetoDeclaracion.getObjetosCadenas().get(cont).getLexema());
+            System.out.print("La siguiente declaracion isCorrecta: " + objetoDeclaracion.isDeclaracionCorrecta());
+
+            System.out.println("");
+            for (int cont = 0; cont < tamaño; cont++) {
+                System.out.print(objetoDeclaracion.getListaObjetosCadenas().get(cont).getLexema());
             }
 
             System.out.println("");
         }
 
     }
-    
-    
+
     public static void main(String[] args) {
         Analizador test = new Analizador();
         test.leerPrograma();

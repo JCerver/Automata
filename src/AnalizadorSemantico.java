@@ -16,7 +16,7 @@ public class AnalizadorSemantico {
     int tokenAnalizado, estado;
 
     public AnalizadorSemantico() {
-         
+
     }
 
     public void iniciar() {
@@ -126,13 +126,13 @@ public class AnalizadorSemantico {
                                 terminadoEnFinalizar = true;
                                 //sintacticoCorrecto =true;
                             }
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         }
 
                         //System.out.println("Paso por el estado " + estado);
@@ -147,7 +147,7 @@ public class AnalizadorSemantico {
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         }
                         //System.out.println("Paso por el estado " + estado);
                         break;
@@ -156,13 +156,13 @@ public class AnalizadorSemantico {
                         if (tokenAnalizado == obtenerTokenn("=")) {
                             estado = 17;
                             declaracion.add(objetosCadenas.get(i));
-                           // System.out.println(objetosCadenas.get(i).getLexema());
+                            // System.out.println(objetosCadenas.get(i).getLexema());
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         }
 
                         break;
@@ -177,7 +177,7 @@ public class AnalizadorSemantico {
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         }
 
                         break;
@@ -193,15 +193,13 @@ public class AnalizadorSemantico {
 
                             ObjetoDeclaracion od = new ObjetoDeclaracion(new ArrayList<Cadena>(declaracion));
                             //ObjetoDeclaracion od = new ObjetoDeclaracion(declaracion);
-                            
-                            
+
                             listaObjetosDeclaraciones.add(od);
 
                             //System.out.println(objetosCadenas.get(i).getLexema());
-
                             //imprimirPrueba();
                             //---------------------------------------------------------------
-                            int tamaño = od.getObjetosCadenas().size();
+                            int tamaño = od.getListaObjetosCadenas().size();
 
                             //System.out.print("Si de guardo el ObjetoDeclaracion       ");
                             for (int cont = 0; cont < tamaño; cont++) {
@@ -211,13 +209,13 @@ public class AnalizadorSemantico {
                             System.out.println("");
 
                             //---------------------------------------------------------------------
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         } else {
                             estado = 4;
                             estadoError = true;
                             //imprimirError(i + 1);
                             //imprimirErrorMensaje(MENSAJE_ERROR_PALABRA_RESERVADA, "Inicial");
-                            declaracion = new ArrayList <Cadena> ();
+                            declaracion = new ArrayList<Cadena>();
                         }
 
                         break;
@@ -281,7 +279,8 @@ public class AnalizadorSemantico {
                     + "                    " + objetosCadenasIdentificadoresNoDeclarados.get(i).getValorInicial());
         }
     }
-/*
+
+    /*
     void imprimirDeclaraciones() {
         for (int i = 0; i < listaObjetosDeclaraciones.size(); i++) {
 
@@ -296,7 +295,6 @@ public class AnalizadorSemantico {
         }
 
     }*/
-
     void imprimirPrueba() {
         for (int i = 0; i < declaracion.size(); i++) {
             System.out.print(declaracion.get(i).getLexema());
@@ -321,6 +319,126 @@ public class AnalizadorSemantico {
         }
     }
 
+    void analizarDeclaraciones() {
+        //analizar cada declaracion
+        
+        //borrar aquellas declaracones con identificadores no declarados
+        borrarDeclaracionesConIdentificadoresNoDeclarados();
+        
+        boolean isCorrecto = false;
+
+        boolean isEntero = false;
+        boolean isString = false;
+        for (int i = 0; i < listaObjetosDeclaraciones.size(); i++) {
+
+            isEntero = false;
+            isString = false;
+            isCorrecto = false;
+
+            ObjetoDeclaracion objeto_declaracion = new ObjetoDeclaracion();
+            objeto_declaracion.setListaObjetosCadenas(new ArrayList<Cadena>(listaObjetosDeclaraciones.get(i).getListaObjetosCadenas()));
+
+            for (int j = 0; j < objeto_declaracion.getListaObjetosCadenas().size(); j++) {
+
+                int posicion = objeto_declaracion.getListaObjetosCadenas().get(j).getPosicion();
+                String lexema = objeto_declaracion.getListaObjetosCadenas().get(j).getLexema();
+                int tokenAsignado = objeto_declaracion.getListaObjetosCadenas().get(j).getTokenAsignado();
+                String metaDato = objeto_declaracion.getListaObjetosCadenas().get(j).getMetaDato();
+                String tipoDato = objeto_declaracion.getListaObjetosCadenas().get(j).getTipoDato();
+                String valorInicial = objeto_declaracion.getListaObjetosCadenas().get(j).getValorInicial();
+
+                Cadena objeto_cadena = new Cadena(posicion, lexema, tokenAsignado, metaDato, tipoDato, valorInicial);
+
+                if (objeto_cadena.getMetaDato().equals("Identificador")) {
+                    if (objeto_cadena.getTipoDato().equals("int")) {
+                        isEntero = true;
+                        //System.out.println("Contiene identificadores de tipo int");
+
+                    } else if (objeto_cadena.getTipoDato().equals("String")) {
+                        isString = true;
+                        //System.out.println("Contiene identificadores de tipo String");
+                    } else {
+                        //System.out.println("Contiene identificadores de tipo null");
+                    }
+                }
+            }
+            
+            if (isEntero==true) {
+                
+                if(isString==true){
+                    isCorrecto = false;
+                }else if(isString==false) {
+                    isCorrecto = true;
+                }
+            } else if (isEntero==false) {
+                
+                if(isString==true){
+                    isCorrecto = true;
+                }else if(isString==false){
+                    isCorrecto = false;
+                }
+            }
+            
+            
+
+            
+            if (isCorrecto ==true) {
+                listaObjetosDeclaraciones.get(i).setDeclaracionCorrecta(true);
+            } else if (isCorrecto ==false) {
+                listaObjetosDeclaraciones.get(i).setDeclaracionCorrecta(false);
+            }
+        }
+
+    }
+    
+    void borrarDeclaracionesConIdentificadoresNoDeclarados(){
+        ArrayList <ObjetoDeclaracion> listaObjetoDeclaracionesComodin1=new ArrayList<ObjetoDeclaracion>(this.listaObjetosDeclaraciones);
+        
+        int tamañoDeListaObjetosDeclaraciones=listaObjetosDeclaraciones.size();
+        boolean contieneIndentificadoresSinDeclarar=false;
+        
+        for (int i = (tamañoDeListaObjetosDeclaraciones-1); i >= 0; i--) {
+            contieneIndentificadoresSinDeclarar=false;
+            
+            ObjetoDeclaracion objeto_declaracion = new ObjetoDeclaracion();
+            objeto_declaracion.setListaObjetosCadenas(new ArrayList<Cadena>(listaObjetosDeclaraciones.get(i).getListaObjetosCadenas()));
+
+            for (int j = 0; j < (objeto_declaracion.getListaObjetosCadenas().size()); j++) {
+
+                int posicion = objeto_declaracion.getListaObjetosCadenas().get(j).getPosicion();
+                String lexema = objeto_declaracion.getListaObjetosCadenas().get(j).getLexema();
+                int tokenAsignado = objeto_declaracion.getListaObjetosCadenas().get(j).getTokenAsignado();
+                String metaDato = objeto_declaracion.getListaObjetosCadenas().get(j).getMetaDato();
+                String tipoDato = objeto_declaracion.getListaObjetosCadenas().get(j).getTipoDato();
+                String valorInicial = objeto_declaracion.getListaObjetosCadenas().get(j).getValorInicial();
+
+                Cadena objeto_cadena = new Cadena(posicion, lexema, tokenAsignado, metaDato, tipoDato, valorInicial);
+
+                if (objeto_cadena.getMetaDato().equals("Identificador")) {
+                    if (objeto_cadena.getTipoDato().equals("int")) {
+                        
+                    } else if (objeto_cadena.getTipoDato().equals("String")) {
+                       
+                    } else {
+                        contieneIndentificadoresSinDeclarar=true;
+                    }
+                }
+            }
+            
+            if (contieneIndentificadoresSinDeclarar==true) {
+                listaObjetosDeclaraciones.remove(i);
+            } else if (contieneIndentificadoresSinDeclarar==false) {
+                
+            }
+        }
+        
+        
+        
+        
+        
+    }
+            
+
     public ArrayList<SimbologiaToken> getSimbologia() {
         return simbologia;
     }
@@ -344,7 +462,5 @@ public class AnalizadorSemantico {
     public void setListaObjetosDeclaraciones(ArrayList<ObjetoDeclaracion> listaObjetosDeclaraciones) {
         this.listaObjetosDeclaraciones = listaObjetosDeclaraciones;
     }
-    
-    
 
 }
