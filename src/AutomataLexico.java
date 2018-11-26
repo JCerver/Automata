@@ -41,7 +41,8 @@ public class AutomataLexico {
     // el numero del token es la posicion del arreglo, la palbra leida estará en tokens1, lo que es esa palabra leida estara en tokens2
     public ArrayList<Cadena> objetosCadenas = new ArrayList();
     public ArrayList<Cadena> arregloComodin = new ArrayList();
-
+    public ArrayList<Cadena> objetosCadenasErrores = new ArrayList();
+    
     ArrayList<SimbologiaToken> simbologia;
 
     int contadorGlobal;
@@ -146,6 +147,11 @@ public class AutomataLexico {
                                 estado = 7;
                             }
 
+                        }else{
+                            estado=0;
+                            palabraAnalizada += simbolo;
+                            //System.out.println("si soy error en estado 0"+palabraAnalizada);
+                            analizarError();
                         }
 
                         break;
@@ -249,6 +255,7 @@ public class AutomataLexico {
                     case 50:
                         erroresAnalizados.add(palabraAnalizada);
                         palabraAnalizada = "";
+                        //analizarError();
                         estado = 0;
                         break;
 
@@ -414,6 +421,18 @@ public class AutomataLexico {
         cadena.setLexema(palabraAnalizada);
         cadena.setMetaDato("Operador");
         objetosCadenas.add(cadena);
+
+        guardarTokenDeOperador();
+        palabraAnalizada = "";
+    }
+    
+    private void analizarError() {
+        //System.out.println("Encontro Error"+palabraAnalizada);
+        Cadena cadena = new Cadena();
+        cadena.setLexema(palabraAnalizada);
+        cadena.setMetaDato("ERROR");
+        cadena.setTokenAsignado(99999);
+        objetosCadenasErrores.add(cadena);
 
         guardarTokenDeOperador();
         palabraAnalizada = "";
@@ -702,4 +721,13 @@ public class AutomataLexico {
         this.lexicoCorrecto = lexicoCorrecto;
     }
 
+    public ArrayList<Cadena> getObjetosCadenasErrores() {
+        return objetosCadenasErrores;
+    }
+
+    public void setObjetosCadenasErrores(ArrayList<Cadena> objetosCadenasErrores) {
+        this.objetosCadenasErrores = objetosCadenasErrores;
+    }
+
+    
 }

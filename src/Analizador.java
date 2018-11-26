@@ -32,6 +32,7 @@ public class Analizador {
     AnalizadorSemantico analizadorSemantico;
 
     public ArrayList<Cadena> objetosCadenas = new ArrayList();
+    public ArrayList<Cadena> objetosCadenasErrores;
 
     boolean lexicoCorrecto = false;
     boolean sintacticoCorrecto = false;
@@ -72,6 +73,7 @@ public class Analizador {
 
     public void leer() {
         separarCadenasConAutomataLexico(this.cadenasPrograma);
+        imprimirErroresLexicos();
 
         if (lexicoCorrecto) {
             llamarAnalizadorSintactico();
@@ -125,7 +127,8 @@ public class Analizador {
         automatalexico.colocarLosDemasTipos();
 
         this.objetosCadenas = new ArrayList<Cadena>(automatalexico.getObjetosCadenas());
-
+        this.objetosCadenasErrores = new ArrayList<Cadena>(automatalexico.getObjetosCadenasErrores());
+        
         this.caracteresAnalizados = new ArrayList<String>(automatalexico.getCaracteresAnalizados());
 
         this.palabrasReservadasAnalizadas = new ArrayList<String>(automatalexico.getPalabrasReservadasAnalizadas());
@@ -134,7 +137,7 @@ public class Analizador {
         this.simbolosAnalizados = new ArrayList<String>(automatalexico.getSimbolosAnalizados());
         this.operadoresAnalizados = new ArrayList<String>(automatalexico.getOperadoresAnalizados());
         this.cadenasDeConstantesAnalizadas = new ArrayList<String>(automatalexico.getCadenasDeConstantesAnalizadas());
-
+        
         if (automatalexico.isLexicoCorrecto()) {
             lexicoCorrecto = true;
         }
@@ -168,6 +171,11 @@ public class Analizador {
         /*  for (int i = 0; i < caracteresAnalizados.size(); i++) {
             System.out.println(caracteresAnalizados.get(i)+"        es cada caracter del programa leido");
         }*/
+        
+        
+        
+        
+        
         System.out.println("Posicion      Cadena leida               Token asignado            metadato                      tipo");
         for (int i = 0; i < objetosCadenas.size(); i++) {
             System.out.println(i + "            " + objetosCadenas.get(i).getLexema()
@@ -214,6 +222,16 @@ public class Analizador {
 
         imprimirDeclaraciones();
 
+    }
+    
+    void imprimirErroresLexicos(){
+        System.out.println("Posicion      Errores leida               Token asignado            metadato                      tipo");
+        for (int i = 0; i < objetosCadenasErrores.size(); i++) {
+            System.out.println(i + "            " + objetosCadenasErrores.get(i).getLexema()
+                    + "                      " + objetosCadenasErrores.get(i).getTokenAsignado()
+                    + "                          " + objetosCadenasErrores.get(i).getMetaDato()
+                    + "                    " + objetosCadenasErrores.get(i).getTipoDato());
+        }
     }
 
     void imprimirDeclaraciones() {

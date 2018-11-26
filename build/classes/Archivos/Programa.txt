@@ -1,7 +1,7 @@
 
 Iniciar
 Variables 
-int a,b
+int a,b,c
 String texto,texto2
 String otravariable
 
@@ -15,15 +15,24 @@ do
 
 variableEntera1=variableEntera2;
 
+variableEntera1=variableEntera2+dfgdfghjgh;
+
 
 b=a+a+b-texto+texto2;
 b=a-b;
+
+c=a-b+c+a+b+texto;
 
 printf();
 while b== "sdsas"
 
 printf ();
 printf ("");
+
+@
+
+<
+
 
 texto=texto2+texto;
 
